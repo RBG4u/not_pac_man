@@ -1,7 +1,11 @@
 import heapq
 
+from game_objects import Player, Enemy, GigaEnemy
 
-def find_path(graph, start, goal):
+
+def find_path(graph: dict[tuple[int, int], list[list[int]]],
+              start: tuple[int, int], goal: tuple[int, int]
+              ) -> list[tuple[int, int]]:
     queue = []
     heapq.heappush(queue, (0, start))
     visited = {start: None}
@@ -13,34 +17,35 @@ def find_path(graph, start, goal):
         if current_coord == goal:
             queue = []
             continue
-        
+
         for next_coord in graph[current_coord]:
             neight_coord = (next_coord[0], next_coord[1])
             new_cost = cost_visited[current_coord]
-            
+
             if neight_coord not in cost_visited:
-                priority_cost = new_cost + manhattan_distance(neight_coord, goal)
+                priority_cost = new_cost + manhattan_distance(neight_coord,
+                                                              goal)
                 heapq.heappush(queue, (priority_cost, neight_coord))
                 cost_visited[neight_coord] = priority_cost
                 visited[neight_coord] = current_coord
-    
+
     path = []
     current = goal
     while current != start:
-            path.append(current)
-            current = visited[current]
+        path.append(current)
+        current = visited[current]
     path.append(start)
     path.reverse()
 
     return path
 
 
-def manhattan_distance(a, b):
+def manhattan_distance(a: tuple[int, int], b: tuple[int, int]) -> int:
     distance = abs(a[0] - b[0]) + abs(a[1] - b[1])
     return distance
 
 
-def do_graph(field):
+def do_graph(field: list[list[int]]) -> dict[tuple[int, int], list[list[int]]]:
     graph = {}
     for i in range(len(field)):
         for j in range(len(field[i])):
@@ -60,9 +65,9 @@ def do_graph(field):
                     graph[i, j].append([i, j+1])
 
     return graph
-  
 
-def do_field(walls_coords):
+
+def do_field(walls_coords: list[list[int]]) -> list[list[int]]:
     CELL = 40
     FIELD_SIZE = 27
     field = []
@@ -81,22 +86,21 @@ def do_field(walls_coords):
 
     return field
 
-def ai_move(walls, player, enemy):
+
+def ai_move(walls: list[list[int]], player: Player, enemy: Enemy | GigaEnemy
+            ) -> tuple[int, int] | list[int]:
     CELL = 40
-    enemy_coord = (enemy.rect.topleft[0] // CELL, enemy.rect.topleft[1] // CELL)
-    player_coord = (player.rect.topleft[0] // CELL, player.rect.topleft[1] // CELL)
+    enemy_coord = (enemy.rect.topleft[0] // CELL,
+                   enemy.rect.topleft[1] // CELL)
+    player_coord = (player.rect.topleft[0] // CELL,
+                    player.rect.topleft[1] // CELL)
     field = do_field(walls)
     graph = do_graph(field)
 
     if player_coord not in graph:
         return graph[enemy_coord][0]
-    
+
     path = find_path(graph, enemy_coord, player_coord)
     move_coord = path[1]
 
     return move_coord
-
-
-if __name__ == "__main__":
-    walls = 1
-    do_field(walls)
