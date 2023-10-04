@@ -18,7 +18,7 @@ class GameObject(Sprite):
 
     def __init__(self, topleft_x: int, topleft_y: int):
         super().__init__()
-        sprite_image_full_path = os.path.join("..", "resources", f"{self.sprite_filename}.{self.sprite_extension}")
+        sprite_image_full_path = os.path.join("resources", f"{self.sprite_filename}.{self.sprite_extension}")
         self.image = scale(load(sprite_image_full_path), (self.width, self.height))
         self.image.set_colorkey(self.color_key)
         self.rect = self.image.get_rect()

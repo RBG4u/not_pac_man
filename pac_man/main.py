@@ -20,12 +20,12 @@ def calc_perimeter_walls(screen_width: int,
     for block_num in range(horizontal_wall_blocks_amount):
         walls_coordinates.extend([
             (block_num * wall_block_width, 0),
-            (block_num * wall_block_width, screen_height - wall_block_height),
+            (block_num * wall_block_width, screen_height - wall_block_height)
         ])
     for block_num in range(1, vertical_wall_blocks_amount + 1):
         walls_coordinates.extend([
             (0, block_num * wall_block_height),
-            (screen_width - wall_block_width, block_num * wall_block_height),
+            (screen_width - wall_block_width, block_num * wall_block_height)
         ])
 
     return walls_coordinates

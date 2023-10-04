@@ -1,4 +1,5 @@
 import pytest
+import pygame
 
 
 @pytest.fixture
@@ -19,3 +20,13 @@ def start():
 @pytest.fixture
 def goal():
     return (2, 1)
+
+
+@pytest.fixture
+def screen():
+    return pygame.Surface((1080, 1080))
+
+
+@pytest.fixture
+def coord():
+    return (20, 10)
